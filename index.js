@@ -3,35 +3,12 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000
 const { getAllBooks, createBook, updateBook, getBook, deleteBook } = require('./services/bookServices');
+const connectDB = require('./db');
 
 
-// *********************************************
-// ****************** MONGODB ******************
-// *********************************************
-// database connection
-const mongoose = require('mongoose');
+// Connecting to database
+connectDB();
 
-// url for connection
-const myurl = 'mongodb+srv://yash:12345@cluster0.hk9d6rl.mongodb.net/Books-Ecom?retryWrites=true&w=majority'
-
-// connect to MongoDB database
-mongoose.connect(myurl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
-
-// create a connection object
-const db = mongoose.connection;
-
-// handle connection errors
-db.on('error', console.error.bind(console, 'connection error:'));
-
-// once connected, log a success message
-db.once('open', function() {
-    console.log("Connected to MongoDB database!");
-});
-
-// *********************************************
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -60,9 +37,9 @@ app.put('/:bookid', async (req, res) => {
 
 app.delete('/:bookid', async (req, res) => {
     const { bookid } = req.params;
-    const deletedbook = await deleteBook(bookid);
+    // const deletedbook = await deleteBook(bookid);
+    res.send('deleting')
 });
-
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`)
